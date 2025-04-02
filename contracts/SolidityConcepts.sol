@@ -47,4 +47,20 @@ contract SolidityConcepts {
     function ownerFunction() public view onlyOwner returns (string memory) {
         return "Hello, Owner!";
     }
+
+    receive() external payable {}
+
+    function sendEther(address payable recipient) public payable {
+        require(msg.value > 0, "Must send ether");
+        recipient.transfer(msg.value);
+    }
+
+    function getContractBalance() public view returns (uint256) {
+        return address(this).balance;
+    }
+
+    function withDraw() public onlyOwner {
+        require(address(this).balance > 0, "No funds to withdraw");
+        payable(owner).transfer(address(this).balance);
+    }
 }
